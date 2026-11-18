@@ -55,9 +55,9 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFound);
 app.use(errorHandler);
 
-// On macOS, port 5000 is occupied by Apple AirPlay Receiver (AirTunes), causing EADDRINUSE or 403 Forbidden.
-// We use 5001 as default / fallback to ensure reliable cross-platform execution without overwriting user's .env.
-const PORT = process.env.PORT && process.env.PORT !== '5000' ? process.env.PORT : 5001;
+// In production (Render/Cloud), always respect process.env.PORT.
+// Locally on macOS, fallback to 5001 because port 5000 is reserved by Apple AirPlay.
+const PORT = process.env.PORT || 5001;
 
 const server = app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
