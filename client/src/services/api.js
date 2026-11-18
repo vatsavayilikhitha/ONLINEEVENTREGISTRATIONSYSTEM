@@ -1,8 +1,14 @@
 import axios from 'axios';
 
-// Use relative /api to benefit from Vite proxy and eliminate all CORS issues
+const rawBaseURL = import.meta.env.VITE_API_URL || '/api';
+const baseURL = (() => {
+  const trimmed = rawBaseURL.trim().replace(/\/+$/, '');
+  if (!trimmed || trimmed === '/api') return '/api';
+  return trimmed.endsWith('/api') ? trimmed : `${trimmed}/api`;
+})();
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL,
   headers: {
     'Content-Type': 'application/json'
   }
